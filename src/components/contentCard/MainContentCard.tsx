@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   TextStyle,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -16,6 +17,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {Feed} from '../../utils/types';
 import Tags from './Tags';
 import ContentComponent from './Content';
+import Modal from '../Modal';
 interface MainContentCardProps {
   readonly feedData: Feed;
 }
@@ -34,6 +36,7 @@ type MainContentCardStyle = {
 const {width} = Dimensions.get('window');
 const MainContentCard: React.FC<MainContentCardProps> = ({feedData}) => {
   var classes = useStyles();
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={classes.main}>
       {/* User */}
@@ -53,7 +56,12 @@ const MainContentCard: React.FC<MainContentCardProps> = ({feedData}) => {
             <Text style={classes.metaDate}>{feedData.meta.createdTime}</Text>
           </View>
         </View>
-        <EntypoIcon name="dots-three-horizontal" size={20} />
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible(true);
+          }}>
+          <EntypoIcon name="dots-three-horizontal" size={20} />
+        </TouchableOpacity>
       </View>
       {/* Text */}
       <View style={classes.mainTextBox}>
@@ -63,6 +71,7 @@ const MainContentCard: React.FC<MainContentCardProps> = ({feedData}) => {
       <ContentComponent contents={feedData.content} />
       {/* Tags */}
       <Tags tagsList={feedData.tags} />
+      <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 };
